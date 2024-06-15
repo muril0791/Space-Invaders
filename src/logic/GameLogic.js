@@ -2,14 +2,14 @@ import * as PIXI from "pixi.js";
 
 // Cria a aplicação PIXI
 export function createApp() {
-  return new PIXI.Application({ width: 800, height: 600 });
+  return new PIXI.Application({ width: 900, height: 600 });
 }
 
 // Cria o background
 export function createBackground() {
   const bgTexture = PIXI.Texture.from("/images/background.png");
   const bg = new PIXI.Sprite(bgTexture);
-  bg.width = 800;
+  bg.width = 900;
   bg.height = 600;
   return bg;
 }
@@ -38,8 +38,8 @@ export function createEnemies() {
     for (let col = 0; col < 11; col++) {
       const enemy = PIXI.Sprite.from(alienTypes[row]);
       enemy.anchor.set(0.5);
-      enemy.x = 50 + col * 60;
-      enemy.y = 50 + row * 60;
+      enemy.x = 135 + col * 60;
+      enemy.y = 135 + row * 60;
       enemies.push({ sprite: enemy, type: row + 1 });
     }
   }

@@ -4,14 +4,14 @@
       <h1>Space Invaders</h1>
       <p>Choose your ship and press Start Game to play.</p>
       <p>Use the arrow keys or W, A, S, D to move your ship and press Space to shoot.</p>
-      <p>Try to reach a score of 10,000!</p>
+      <p>Try to reach a score of 50,000!</p>
       <p>High Score: {{ highScore }}</p>
       <div class="nave-selection">
         <button @click="prevNave">←</button>
         <img :src="selectedNave" alt="Nave do jogador" />
         <button @click="nextNave">→</button>
       </div>
-      <button @click="startGame">Start Game</button>
+      <button class="startButton" @click="startGame">Start Game</button>
     </div>
     <div ref="gameCanvas" v-show="state !== 'menu'" class="game-canvas"></div>
     <div v-if="state === 'gameover'" class="overlay">
@@ -30,7 +30,7 @@
 <script>
 import * as PIXI from 'pixi.js';
 import { nextTick } from 'vue';
-import { createApp, createBackground, createPlayer, createEnemies, shootPlayerBullet, shootEnemyBullet, checkCollision, createLives, createScoreText } from '@/logic/GameLogic';
+import { createApp, createBackground, createPlayer, createEnemies, shootPlayerBullet, shootEnemyBullet, checkCollision } from '@/logic/GameLogic';
 
 export default {
   data() {
@@ -52,6 +52,7 @@ export default {
       lives: 3,
       keys: {},
       scoreText: null,
+      livesText: null,
     };
   },
   computed: {
@@ -91,7 +92,7 @@ export default {
       }
       this.app = createApp();
       if (this.$refs.gameCanvas && this.app.view) {
-        this.$refs.gameCanvas.innerHTML = ''; // Limpa o canvas anterior
+        this.$refs.gameCanvas.innerHTML = ''; 
         this.$refs.gameCanvas.appendChild(this.app.view);
       } else {
         console.error('gameCanvas or app.view is not available.');
@@ -106,10 +107,23 @@ export default {
       this.enemies = createEnemies();
       this.enemies.forEach(({ sprite }) => this.app.stage.addChild(sprite));
 
-      this.scoreText = createScoreText();
+      this.scoreText = new PIXI.Text(`Score: ${this.score}`, {
+        fontFamily: 'Press Start 2P',
+        fontSize: 24,
+        fill: '#ffffff',
+        align: 'left',
+      });
+      this.scoreText.position.set(10, 10);
       this.app.stage.addChild(this.scoreText);
 
-      this.updateLives();
+      this.livesText = new PIXI.Text(`Lives: ${this.lives}`, {
+        fontFamily: 'Press Start 2P',
+        fontSize: 24,
+        fill: '#ffffff',
+        align: 'left',
+      });
+      this.livesText.position.set(10, 50);
+      this.app.stage.addChild(this.livesText);
     },
     destroyApp() {
       if (this.app) {
@@ -143,11 +157,10 @@ export default {
       this.updateEnemyBullets();
       this.checkCollisions();
       this.respawnEnemies();
-      this.updateScore();
       if (this.lives <= 0) {
         this.gameOver();
       }
-      if (this.score >= 10000) {
+      if (this.score >= 50000) {
         this.win();
       }
       if (Math.random() < 0.01) {
@@ -227,6 +240,7 @@ export default {
                 this.score += 400;
                 break;
             }
+            this.updateScore();
             break;
           }
         }
@@ -238,8 +252,8 @@ export default {
         const col = Math.floor(Math.random() * 11);
         const enemy = PIXI.Sprite.from(`/images/alien${row + 1}.png`);
         enemy.anchor.set(0.5);
-        enemy.x = 50 + col * 60;
-        enemy.y = 50 + row * 60;
+        enemy.x = 135 + col * 60;
+        enemy.y = 135 + row * 60;
         this.enemies.push({ sprite: enemy, type: row + 1 });
         this.app.stage.addChild(enemy);
       }
@@ -248,9 +262,7 @@ export default {
       this.scoreText.text = `Score: ${this.score}`;
     },
     updateLives() {
-      this.app.stage.children = this.app.stage.children.filter(child => !child.texture || child.texture.baseTexture.imageUrl !== '/images/heart.png');
-      const hearts = createLives(this.lives);
-      hearts.forEach(heart => this.app.stage.addChild(heart));
+      this.livesText.text = `Lives: ${this.lives}`;
     },
     gameOver() {
       this.app.ticker.stop();
@@ -280,14 +292,16 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 .game-container {
   background-color: black;
   color: white;
   font-family: 'Press Start 2P', cursive;
 }
-
+.startButton{ background-color: #333; color: #00ff00; border: none; padding: 10px 20px; cursor: pointer; font-size: 18px; font-family: 'Press Start 2P', cursive; }
 .game-canvas {
-  width: 800px;
+  width: 900px;
   height: 600px;
   margin: 0 auto;
   position: relative;
@@ -326,7 +340,15 @@ img {
   width: 100px;
   height: auto;
 }
-
+.startButton {
+  background-color: #333;
+  color: #00ff00;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 18px;
+  font-family: 'Press Start 2P', cursive;
+}
 .overlay {
   position: absolute;
   top: 0;
