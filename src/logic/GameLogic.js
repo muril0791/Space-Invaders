@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 
 // Cria a aplicação PIXI
 export function createApp() {
-  return new PIXI.Application({ width: 900, height: 600 });
+  return new PIXI.Application({ width: 900, height: 700 });
 }
 
 // Cria o background
@@ -10,7 +10,7 @@ export function createBackground() {
   const bgTexture = PIXI.Texture.from("/images/background.png");
   const bg = new PIXI.Sprite(bgTexture);
   bg.width = 900;
-  bg.height = 600;
+  bg.height = 700;
   return bg;
 }
 
