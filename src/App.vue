@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="game-container">
     <div v-if="state === 'menu'" class="menu">
       <h1>Space Invaders</h1>
       <p>Choose your ship and press Start Game to play.</p>
@@ -147,7 +147,7 @@ export default {
       if (this.lives <= 0) {
         this.gameOver();
       }
-      if (this.score >= 50000) {
+      if (this.score >= 10000) {
         this.win();
       }
       if (Math.random() < 0.01) {
@@ -280,16 +280,25 @@ export default {
 </script>
 
 <style scoped>
+.game-container {
+  background-color: black;
+  color: white;
+  font-family: 'Press Start 2P', cursive;
+}
+
 .game-canvas {
   width: 800px;
   height: 600px;
   margin: 0 auto;
   position: relative;
+  border: 2px solid #00ff00;
+  background-color: black;
 }
 
 .menu {
   text-align: center;
   margin-top: 50px;
+  color: #00ff00;
 }
 
 .nave-selection {
@@ -301,7 +310,7 @@ export default {
 
 .nave-selection button {
   background-color: #333;
-  color: white;
+  color: #00ff00;
   border: none;
   padding: 10px;
   cursor: pointer;
@@ -325,11 +334,12 @@ img {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.7);
-  color: white;
+  color: #00ff00;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-family: 'Press Start 2P', cursive;
 }
 
 .overlay h1 {
@@ -339,7 +349,7 @@ img {
 
 .overlay button {
   background-color: #333;
-  color: white;
+  color: #00ff00;
   border: none;
   padding: 10px 20px;
   cursor: pointer;

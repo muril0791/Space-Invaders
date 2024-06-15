@@ -1,7 +1,8 @@
 /* Estilo global */
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
+  background-color: black;
+    color: white;
+    font-family: 'Press Start 2P', cursive;
 }
 
 .menu {
